@@ -10,12 +10,19 @@ namespace Market.DataAccess.DbConnection
         {
         }
         public DbSet<Categories> Categories { get; set; }
+
         public DbSet<Customers> Customers { get; set; }
+
         public DbSet<Deliveries> Deliveries { get; set; }
-        public DbSet<Payment> Payment { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
+
         public DbSet<Products> Products { get; set; }
-        public DbSet<Seller> Seller { get; set; }
+
+        public DbSet<Seller> Sellers { get; set; }
+
         public DbSet<ShoppingOrder> ShoppingOrders { get; set; }
-        public DbSet<Transaction_Reports> Transaction_Reports { get; set; }
+
+        public DbSet<TransactionReports> TransactionReports { get; set; }
     }
 }

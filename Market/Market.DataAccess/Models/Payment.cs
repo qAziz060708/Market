@@ -9,7 +9,11 @@ namespace Market.DataAccess.Models
     public class Payment
     {
         public int PaymentId { get; set; }
+
         public int CategoryId { get; set; }
+
         public DateTime Date { get; set; }
+
+        public Customers customer { get; set; }
     }
 }

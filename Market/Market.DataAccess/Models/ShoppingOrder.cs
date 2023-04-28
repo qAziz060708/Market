@@ -9,7 +9,14 @@ namespace Market.DataAccess.Models
     public class ShoppingOrder
     {
         public int OrderId { get; set; }
+
         public int CustomerId { get; set; }
+
         public DateTime Date { get; set; }
+
+
+        public List<TransactionReports> transactionReports { get; set; }
+
+        public Customers customers { get; set; }
     }
 }
