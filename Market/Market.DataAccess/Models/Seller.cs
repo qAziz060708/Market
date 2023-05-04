@@ -15,6 +15,6 @@ namespace Market.DataAccess.Models
         public string Name { get; set; }
 
 
-        public List<Products> products { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Market.DataAccess.Models
 {
-    public class Products
+    public class Product
     {
         public int ProductId { get; set; }
 
@@ -15,13 +15,12 @@ namespace Market.DataAccess.Models
         public string ProductName { get; set; }
 
 
-        public List<Seller> seller { get; set;}
+        public List<Seller> Sellers { get; set;}
 
-        public List<TransactionReports> transactionReports { get; set;}
+        public List<TransactionReport> TransactionReports { get; set;}
 
-        public Customers customers { get; set; }
+        public Customer Customer { get; set; }
 
-        public Categories categories { get; set; }
-
+        public Category Category { get; set; }
     }
 }

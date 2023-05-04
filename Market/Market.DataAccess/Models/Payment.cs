@@ -12,8 +12,9 @@ namespace Market.DataAccess.Models
 
         public int CategoryId { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime PaymentDate { get; set; }
 
-        public Customers customer { get; set; }
+
+        public Customer Customer { get; set; }
     }
 }

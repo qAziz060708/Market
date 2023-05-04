@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Market.DataAccess.Models
 {
-    public class Deliveries
+    public class Delivery
     {
-       public int DeliveriesId { get; set; }
+       public int DeliveryId { get; set; }
 
        public int CustomerId { get; set; }
 
-       public DateTime Date { get; set; }
+       public DateTime DeliveryDate { get; set; }
 
-        public Customers customer { get; set; }
+
+       public Customer Customer { get; set; }
     }
 }

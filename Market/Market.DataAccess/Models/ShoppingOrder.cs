@@ -15,8 +15,8 @@ namespace Market.DataAccess.Models
         public DateTime Date { get; set; }
 
 
-        public List<TransactionReports> transactionReports { get; set; }
+        public List<TransactionReport> TransactionReports { get; set; }
 
-        public Customers customers { get; set; }
+        public Customer Customer { get; set; }
     }
 }

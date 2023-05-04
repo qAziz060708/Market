@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Market.DataAccess.Models
 {
-    public class Customers
+    public class Customer
     {
         public int CustomerId { get; set; }
 
@@ -17,14 +17,14 @@ namespace Market.DataAccess.Models
         public string Address { get; set; }
 
 
-        public List<Categories> categories { get; set; }
+        public List<Category> Categories { get; set; }
 
-        public List<Products> products { get; set; }
+        public List<Product> Products { get; set; }
 
-        public List<Payment> payments { get; set; }
+        public List<Payment> Payments { get; set; }
 
-        public List<Deliveries> deliveries { get; set; }
+        public List<Delivery> Deliveries { get; set; }
 
-        public List<ShoppingOrder> shoppingOrders { get; set;}
+        public List<ShoppingOrder> ShoppingOrders { get; set;}
     }
 }
