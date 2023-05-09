@@ -10,7 +10,9 @@ namespace Market.DataAccess.Models
     {
         public int CustomerId { get; set; }
 
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        public string LasName { get; set; }
 
         public string ContactAdd { get; set; }
 
