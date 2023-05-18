@@ -3,10 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Market.DataAccess.Models;
 
 namespace Market.DataAccess.Repositories.IRepositories
 {
-    internal class IPaymentRepository
+    public interface IPaymentRepository
     {
+        Task<int> AddPaymentAsync(Payment payment);
+
+        Task<int> UpdatePaymentAsync(Payment payment);
+
+        Task<int> DeletePaymentAsync(Payment payment);
+
+        Task<Payment> GetPaymentByIdAsync(int id);
+
+        Task<List<Payment>> GetAllPaymentsAsync();
     }
 }
