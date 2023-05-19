@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,37 +22,93 @@ namespace Market.DataAccess.Repositories.Repositories
 
         public async Task<int> AddPaymentAsync(Payment payment)
         {
-            _marketDbContext.Payments.Add(payment);
-            await _marketDbContext.SaveChangesAsync();
-            return payment.PaymentId;
+            try
+            {
+                _marketDbContext.Payments.Add(payment);
+                await _marketDbContext.SaveChangesAsync();
+                return payment.PaymentId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> DeletePaymentAsync(Payment payment)
         {
-            _marketDbContext.Payments.Remove(payment);
-            await _marketDbContext.SaveChangesAsync();
-            return payment.PaymentId;
+            try
+            {
+                _marketDbContext.Payments.Remove(payment);
+                await _marketDbContext.SaveChangesAsync();
+                return payment.PaymentId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<List<Payment>> GetAllPaymentsAsync()
         {
-            return await _marketDbContext.Payments
+            try
+            {
+                return await _marketDbContext.Payments
                .Include(u => u.Customer)
                .ToListAsync();
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<Payment> GetPaymentByIdAsync(int id)
         {
-            return await _marketDbContext.Payments
-                .Include(u => u.Customer)
-                .FirstOrDefaultAsync(u => u.PaymentId == id);
+            try
+            {
+                return await _marketDbContext.Payments
+               .Include(u => u.Customer)
+               .FirstOrDefaultAsync(u => u.PaymentId == id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> UpdatePaymentAsync(Payment payment)
         {
-            _marketDbContext.Payments.Update(payment);
-            await _marketDbContext.SaveChangesAsync();
-            return payment.PaymentId;
+            try
+            {
+                var paymentForUpdate = await GetPaymentByIdAsync(payment.PaymentId);
+                paymentForUpdate.PaymentDate = payment.PaymentDate;
+                await _marketDbContext.SaveChangesAsync();
+                return payment.PaymentId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
     }
 }

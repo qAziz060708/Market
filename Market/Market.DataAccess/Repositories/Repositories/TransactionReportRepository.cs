@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,39 +22,94 @@ namespace Market.DataAccess.Repositories.Repositories
 
         public async Task<int> AddTransactionReportAsync(TransactionReport transactionreport)
         {
-            _marketDbContext.TransactionReports.Add(transactionreport);
-            await _marketDbContext.SaveChangesAsync();
-            return transactionreport.ReportId;
+            try
+            {
+                _marketDbContext.TransactionReports.Add(transactionreport);
+                await _marketDbContext.SaveChangesAsync();
+                return transactionreport.ReportId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> DeleteTransactionReportAsync(TransactionReport transactionreport)
         {
-            _marketDbContext.TransactionReports.Remove(transactionreport);
-            await _marketDbContext.SaveChangesAsync();
-            return transactionreport.ReportId;
+            try
+            {
+                _marketDbContext.TransactionReports.Remove(transactionreport);
+                await _marketDbContext.SaveChangesAsync();
+                return transactionreport.ReportId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<List<TransactionReport>> GetAllTransactionReportsAsync()
         {
-            return await _marketDbContext.TransactionReports
-                .Include(u => u.ShoppingOrder)
-                .Include(u => u.Products)
-                .ToListAsync();
+            try
+            {
+                return await _marketDbContext.TransactionReports
+               .Include(u => u.ShoppingOrder)
+               .Include(u => u.Products)
+               .ToListAsync();
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<TransactionReport> GetTransactionReportByIdAsync(int id)
         {
-            return await _marketDbContext.TransactionReports
-                .Include(u => u.ShoppingOrder)
-                .Include(u => u.Products)
-                .FirstOrDefaultAsync(u => u.ReportId == id);
+            try
+            {
+                return await _marketDbContext.TransactionReports
+               .Include(u => u.ShoppingOrder)
+               .Include(u => u.Products)
+               .FirstOrDefaultAsync(u => u.ReportId == id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> UpdateTransactionReportAsync(TransactionReport transactionreport)
         {
-            _marketDbContext.TransactionReports.Update(transactionreport);
-            await _marketDbContext.SaveChangesAsync();
-            return transactionreport.ReportId;
+            try
+            {
+                var transactionreportForUpdate = await GetTransactionReportByIdAsync(transactionreport.ReportId);
+                await _marketDbContext.SaveChangesAsync();
+                return transactionreport.ReportId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,39 +22,95 @@ namespace Market.DataAccess.Repositories.Repositories
 
         public async Task<int> AddShoppingOrderAsync(ShoppingOrder shoppingOrder)
         {
-            _marketDbContext.ShoppingOrders.Add(shoppingOrder);
-            await _marketDbContext.SaveChangesAsync();
-            return shoppingOrder.OrderId;
+            try
+            {
+                _marketDbContext.ShoppingOrders.Add(shoppingOrder);
+                await _marketDbContext.SaveChangesAsync();
+                return shoppingOrder.OrderId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> DeleteShoppingOrderAsync(ShoppingOrder shoppingOrder)
         {
-            _marketDbContext.ShoppingOrders.Remove(shoppingOrder);
-            await _marketDbContext.SaveChangesAsync();
-            return shoppingOrder.OrderId;
+            try
+            {
+                _marketDbContext.ShoppingOrders.Remove(shoppingOrder);
+                await _marketDbContext.SaveChangesAsync();
+                return shoppingOrder.OrderId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<List<ShoppingOrder>> GetAllShoppingOrdersAsync()
         {
-            return await _marketDbContext.ShoppingOrders
-                .Include(u => u.TransactionReports)
-                .Include(u => u.Customer)
-                .ToListAsync();
+            try
+            {
+                return await _marketDbContext.ShoppingOrders
+               .Include(u => u.TransactionReports)
+               .Include(u => u.Customer)
+               .ToListAsync();
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<ShoppingOrder> GetShoppingOrderByIdAsync(int id)
         {
-            return await _marketDbContext.ShoppingOrders
-                .Include(u => u.TransactionReports)
-                .Include(u => u.Customer)
-                .FirstOrDefaultAsync(u => u.OrderId == id);
+            try
+            {
+                return await _marketDbContext.ShoppingOrders
+               .Include(u => u.TransactionReports)
+               .Include(u => u.Customer)
+               .FirstOrDefaultAsync(u => u.OrderId == id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> UpdateShoppingOrderAsync(ShoppingOrder shoppingOrder)
         {
-            _marketDbContext.ShoppingOrders.Update(shoppingOrder);
-            await _marketDbContext.SaveChangesAsync();
-            return shoppingOrder.OrderId;
+            try
+            {
+                var shoppingForUpdate = await GetShoppingOrderByIdAsync(shoppingOrder.OrderId);
+                shoppingForUpdate.ShoppingDate = shoppingOrder.ShoppingDate;
+                await _marketDbContext.SaveChangesAsync();
+                return shoppingOrder.OrderId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
     }
 }

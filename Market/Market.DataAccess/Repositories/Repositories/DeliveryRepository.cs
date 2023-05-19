@@ -7,6 +7,7 @@ using Market.DataAccess.Repositories.IRepositories;
 using Market.DataAccess.Models;
 using Market.DataAccess.DbConnection;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 
 namespace Market.DataAccess.Repositories.Repositories
 {
@@ -21,37 +22,93 @@ namespace Market.DataAccess.Repositories.Repositories
 
         public async Task<int> AddDeliveryAsync(Delivery delivery)
         {
-            _marketDbContext.Deliveries.Add(delivery);
-            await _marketDbContext.SaveChangesAsync();
-            return delivery.DeliveryId;
+            try
+            {
+                _marketDbContext.Deliveries.Add(delivery);
+                await _marketDbContext.SaveChangesAsync();
+                return delivery.DeliveryId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> DeleteDeliveryAsync(Delivery delivery)
         {
-            _marketDbContext.Deliveries.Remove(delivery);
-            await _marketDbContext.SaveChangesAsync();
-            return delivery.DeliveryId;
+            try
+            {
+                _marketDbContext.Deliveries.Remove(delivery);
+                await _marketDbContext.SaveChangesAsync();
+                return delivery.DeliveryId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<List<Delivery>> GetAllDeliveriesAsync()
         {
-            return await _marketDbContext.Deliveries
-                .Include(u => u.Customer)
-                .ToListAsync();
+            try
+            {
+                return await _marketDbContext.Deliveries
+               .Include(u => u.Customer)
+               .ToListAsync();
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<Delivery> GetDeliveryByIdAsync(int id)
         {
-            return await _marketDbContext.Deliveries
-                .Include(u => u.Customer)
-                .FirstOrDefaultAsync(u =>u.DeliveryId == id);
+            try
+            {
+                return await _marketDbContext.Deliveries
+               .Include(u => u.Customer)
+               .FirstOrDefaultAsync(u => u.DeliveryId == id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> UpdateDeliveryAsync(Delivery delivery)
         {
-            _marketDbContext.Deliveries.Update(delivery);
-            await _marketDbContext.SaveChangesAsync();
-            return delivery.DeliveryId;
+            try
+            {
+                var deliveryForUpdate = await GetDeliveryByIdAsync(delivery.DeliveryId);
+                deliveryForUpdate.DeliveryDate = delivery.DeliveryDate;
+                await _marketDbContext.SaveChangesAsync();
+                return delivery.DeliveryId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
     }
 }
