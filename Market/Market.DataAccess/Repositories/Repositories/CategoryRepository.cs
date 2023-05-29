@@ -7,6 +7,7 @@ using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.DataAccess.DbConnection;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 
 namespace Market.DataAccess.Repositories.Repositories
 {
@@ -18,42 +19,99 @@ namespace Market.DataAccess.Repositories.Repositories
         {
             _marketDbContext = marketDbContext;  
         }
-
+        
         public async Task<int> AddCategoryAsync(Category category)
         {
-            _marketDbContext.Categories.Add(category);
-            await _marketDbContext.SaveChangesAsync();
-            return category.CategoryId;
+            try
+            {
+                _marketDbContext.Categories.Add(category);
+                await _marketDbContext.SaveChangesAsync();
+                return category.CategoryId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch(Exception ex) 
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }          
         }
 
         public async Task<int> DeleteCategoryAsync(Category category)
         {
-            _marketDbContext.Categories.Remove(category);
-            await _marketDbContext.SaveChangesAsync();
-            return category.CategoryId;
+            try
+            {
+                _marketDbContext.Categories.Remove(category);
+                await _marketDbContext.SaveChangesAsync();
+                return category.CategoryId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            return await _marketDbContext.Categories
-                .Include(u => u.Products)
-                .Include(u => u.Customer)
-                .ToListAsync();
+            try
+            {
+                return await _marketDbContext.Categories
+               .Include(u => u.Products)
+               .Include(u => u.Customer)
+               .ToListAsync();
+            }
+            catch(InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<Category> GetCategoryByIdAsync(int id)
         {
-            return await _marketDbContext.Categories
-                .Include(u => u.Products)
-                .Include(u => u.Customer)
-                .FirstOrDefaultAsync(u => u.CategoryId == id);
+            try
+            {
+                return await _marketDbContext.Categories
+               .Include(u => u.Products)
+               .Include(u => u.Customer)
+               .FirstOrDefaultAsync(u => u.CategoryId == id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception("Operation was failed wnet it was given the info");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
 
         public async Task<int> UpdateCategoryAsync(Category category)
         {
-            _marketDbContext.Categories.Update(category);
-            await _marketDbContext.SaveChangesAsync();
-            return category.CategoryId;
+            try
+            {
+                var categoryForUpdate = await GetCategoryByIdAsync(category.CategoryId);
+                categoryForUpdate.CategoryName = category.CategoryName;
+                categoryForUpdate.CategoryType = category.CategoryType;
+                await _marketDbContext.SaveChangesAsync();
+                return category.CategoryId;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Connection between database is failed");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Operation was failed when it saved changes");
+            }
         }
     }
 }
