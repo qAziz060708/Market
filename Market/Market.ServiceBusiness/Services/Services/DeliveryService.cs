@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Market.ServiceBusiness.Services.Services
 {
-    internal class DeliveryService : IDeliveryService
+    public class DeliveryService : IDeliveryService
     {
         private readonly IDeliveryRepository _deliveryRepository;
         public DeliveryService(IDeliveryRepository deliveryRepository)

@@ -11,7 +11,7 @@ using System.Data.Entity.Infrastructure;
 
 namespace Market.ServiceBusiness.Services.Services
 {
-    internal class CategoryService : ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
         public CategoryService(ICategoryRepository categoryRepository)

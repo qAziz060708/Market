@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Market.ServiceBusiness.Services.Services
 {
-    internal class TransactionReportService : ITransactionReportService
+    public class TransactionReportService : ITransactionReportService
     {
         private readonly ITransactionReportRepository _transactionReportRepository;
         public TransactionReportService(ITransactionReportRepository transactionReportRepository)

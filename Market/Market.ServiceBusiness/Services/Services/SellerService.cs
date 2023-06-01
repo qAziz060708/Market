@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Market.ServiceBusiness.Services.Services
 {
-    internal class SellerService : ISellerService
+    public class SellerService : ISellerService
     {
         private readonly ISellerRepository _sellerRepository;
         public SellerService(ISellerRepository sellerRepository)
@@ -98,6 +98,10 @@ namespace Market.ServiceBusiness.Services.Services
                 if(sellerResult is not null)
                 {
                     return await _sellerRepository.UpdateSellerAsync(seller);
+                }
+                else
+                {
+                    throw new Exception("Object cannot be updated");
                 }
             }
             catch (DbUpdateException ex)
