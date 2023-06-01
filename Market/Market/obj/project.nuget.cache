@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OhBKbIUWJDzI4TVF650KOH/Tvoh68wUXHpkqLP6f55OiQvewCtFtRkFW/MZAHYC8CCO6mVwKu6YbxJ31TNzaug==",
+  "dgSpecHash": "7Oh4OIJTwy/nxJmbJFUHdUJ31J9ZgNqTC/dMkHwrHco19ryOmDKtOiBAsrZ3dIgH+NTyHUEoeBOu2tU2Vr8Byg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\User\\Desktop\\Market\\Market\\Market\\Market\\Market.csproj",
+  "projectFilePath": "C:\\Users\\User\\Desktop\\Market\\TestMarket\\Market\\Market\\Market.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
