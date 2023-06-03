@@ -4,10 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Market", "Market\Market.csproj", "{B7742D0E-80F0-40B4-A3A9-125A97EED976}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1CECA314-8217-426B-9671-ECCE66F0CC3F} = {1CECA314-8217-426B-9671-ECCE66F0CC3F}
+		{BFA6C8D3-5FA2-4394-A4DC-A8BAA6AB4D99} = {BFA6C8D3-5FA2-4394-A4DC-A8BAA6AB4D99}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.DataAccess", "Market.DataAccess\Market.DataAccess.csproj", "{1CECA314-8217-426B-9671-ECCE66F0CC3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Market.DataAccess", "Market.DataAccess\Market.DataAccess.csproj", "{1CECA314-8217-426B-9671-ECCE66F0CC3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.ServiceBusiness", "Market.ServiceBusiness\Market.ServiceBusiness.csproj", "{BFA6C8D3-5FA2-4394-A4DC-A8BAA6AB4D99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Market.ServiceBusiness", "Market.ServiceBusiness\Market.ServiceBusiness.csproj", "{BFA6C8D3-5FA2-4394-A4DC-A8BAA6AB4D99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Market.ServiceBusiness.Services.Services
 {
-    internal class CustomerService : ICustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
         public CustomerService(ICustomerRepository customerRepository)
