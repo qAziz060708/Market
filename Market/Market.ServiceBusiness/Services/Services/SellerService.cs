@@ -103,6 +103,7 @@ namespace Market.ServiceBusiness.Services.Services
                 {
                     throw new Exception("Object cannot be updated");
                 }
+                //Tester
             }
             catch (DbUpdateException ex)
             {
