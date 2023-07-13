@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Market.DataAccess.DbConnection;
 using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
-using Market.DataAccess.DbConnection;
 using Microsoft.EntityFrameworkCore;
 
 namespace Market.DataAccess.Repositories.Repositories
@@ -16,9 +11,9 @@ namespace Market.DataAccess.Repositories.Repositories
 
         public CategoryRepository(MarketDbContext marketDbContext)
         {
-            _marketDbContext = marketDbContext;  
+            _marketDbContext = marketDbContext;
         }
-        
+
         public async Task<int> AddCategoryAsync(Category category)
         {
             try
@@ -31,10 +26,10 @@ namespace Market.DataAccess.Repositories.Repositories
             {
                 throw new Exception("Connection between database is failed");
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception("Operation was failed when it saved changes");
-            }          
+            }
         }
 
         public async Task<int> DeleteCategoryAsync(Category category)
@@ -64,7 +59,7 @@ namespace Market.DataAccess.Repositories.Repositories
                .Include(u => u.Customer)
                .ToListAsync();
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 throw new Exception("Operation was failed wnet it was given the info");
             }

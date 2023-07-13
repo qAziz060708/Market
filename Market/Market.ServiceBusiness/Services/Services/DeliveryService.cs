@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.ServiceBusiness.Services.IServices;
 using Market.ServiceBusiness.DTO.Response_DTO;
