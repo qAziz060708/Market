@@ -1,31 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Market.DataAccess.Models;
+using Market.ServiceBusiness.DTO.Response_DTO;
 using Market.ServiceBusiness.Services.IServices;
 namespace Market.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionreportController : ControllerBase
+    public class TransactionReportController : ControllerBase
     {
         private readonly ITransactionReportService _transactionReport;
-        public TransactionreportController(ITransactionReportService transactionReport)
+
+        public TransactionReportController(ITransactionReportService transactionReport)
         {
             _transactionReport = transactionReport;
         }
-        [HttpPost]
-        public async Task<ActionResult<int>> AddTransactionReport(TransactionReport transactionReport)
-        {
-            try
-            {
-                return await _transactionReport.AddTransactionReportAsync(transactionReport);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+
         [HttpGet]
-        public async Task<ActionResult<List<TransactionReport>>> GetAllTransactionsReports()
+
+        public async Task<ActionResult<List<TransactionReportResponseDTO>>> GetAllTransactionsReports()
         {
             try
             {
@@ -36,36 +27,13 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet("id")]
-        public async Task<ActionResult<TransactionReport>> GetTransactionReportById(int id)
+        public async Task<ActionResult<TransactionReportResponseDTO>> GetTransactionReportById(int id)
         {
             try
             {
                 return await _transactionReport.GetTransactionReportByIdAsync(id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-        [HttpPut]
-        public async Task<ActionResult<int>> UpdateTransactionReport(TransactionReport transactionReport, int id)
-        {
-            try
-            {
-                return await _transactionReport.UpdateTransactionReportAsync(transactionReport, id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-        [HttpDelete]
-        public async Task<ActionResult<int>> DeleteTransactionReport(int id)
-        {
-            try
-            {
-                return await _transactionReport.DeleteTransactionReportAsync(id);
             }
             catch (Exception ex)
             {

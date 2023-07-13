@@ -4,15 +4,15 @@ using Market.ServiceBusiness.Services.Services;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.DataAccess.Repositories.Repositories;
 using Market.DataAccess.DbConnection;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddNewtonsoftJson(op => op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 // Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+var config = builder.Configuration.GetSection("ConnectionStrings");
+builder.Services.AddDbContext<MarketDbContext>(option => option.UseNpgsql(config["Connect"]));
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
@@ -30,7 +30,11 @@ builder.Services.AddScoped<ISellerRepository, SellerRepository>();
 builder.Services.AddScoped<IShoppingOrderRepository, ShoppingOrderRepository>();
 builder.Services.AddScoped<ITransactionReportRepository, TransactionReportRepository>();
 builder.Services.AddScoped<MarketDbContext>();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 
 var app = builder.Build();
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Market.DataAccess.Models;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 using Market.ServiceBusiness.Services.IServices;
 namespace Market.Controller
 {
@@ -12,20 +13,22 @@ namespace Market.Controller
         {
             _shoppingOrderService = shoppingOrderService;
         }
+
         [HttpPost]
-        public async Task<ActionResult<int>> AddShoppingOrder(ShoppingOrder shoppingOrder)
+        public async Task<ActionResult<int>> AddShoppingOrder(ShoppingOrderRequestDTO shoppingOrderRequestDTO)
         {
             try
             {
-                return await _shoppingOrderService.AddShoppingOrderAsync(shoppingOrder);
+                return await _shoppingOrderService.AddShoppingOrderAsync(shoppingOrderRequestDTO);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<ShoppingOrder>>> GetAllShoppingOrders()
+        public async Task<ActionResult<List<ShoppingOrderResponseDTO>>> GetAllShoppingOrders()
         {
             try
             {
@@ -36,8 +39,9 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet("id")]
-        public async Task<ActionResult<ShoppingOrder>> GetShoppingOrderById(int id)
+        public async Task<ActionResult<ShoppingOrderResponseDTO>> GetShoppingOrderById(int id)
         {
             try
             {
@@ -48,18 +52,20 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpPut]
-        public async Task<ActionResult<int>> UpdateShoppingOrder(ShoppingOrder shoppingOrder, int id)
+        public async Task<ActionResult<int>> UpdateShoppingOrder(ShoppingOrderRequestDTO shoppingOrderRequestDTO, int id)
         {
             try
             {
-                return await _shoppingOrderService.UpdateShoppingOrderAsync(shoppingOrder, id);
+                return await _shoppingOrderService.UpdateShoppingOrderAsync(shoppingOrderRequestDTO, id);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpDelete]
         public async Task<ActionResult<int>> DeleteShoppingOrder(int id)
         {

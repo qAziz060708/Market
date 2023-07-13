@@ -1,22 +1,11 @@
-﻿using Market.DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.IServices
 {
     public interface IDeliveryService
     {
-        Task<int> AddDeliveryAsync(Delivery delivery);
+        Task<DeliveryResponseDTO> GetDeliveryByIdAsync(int id);
 
-        Task<int> UpdateDeliveryAsync(Delivery delivery, int id);
-
-        Task<int> DeleteDeliveryAsync(int id);
-
-        Task<Delivery> GetDeliveryByIdAsync(int id);
-
-        Task<List<Delivery>> GetAllDeliveriesAsync();
+        Task<List<DeliveryResponseDTO>> GetAllDeliveriesAsync();
     }
 }

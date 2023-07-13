@@ -1,28 +1,28 @@
-﻿using Market.DataAccess.Models;
+﻿using AutoMapper;
+using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.ServiceBusiness.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.Services
 {
     public class SellerService : ISellerService
     {
         private readonly ISellerRepository _sellerRepository;
-        public SellerService(ISellerRepository sellerRepository)
+        private readonly IMapper _mapper;
+        public SellerService(ISellerRepository sellerRepository, IMapper mapper)
         {
             _sellerRepository = sellerRepository;
+            _mapper = mapper;
         }
 
-        public async Task<int> AddSellerAsync(Seller seller)
+        public async Task<int> AddSellerAsync(SellerRequestDTO sellerRequestDTO)
         {
             try
             {
-                return await _sellerRepository.AddSellerAsync(seller);
+                return await _sellerRepository.AddSellerAsync(_mapper.Map<Seller>(sellerRequestDTO));
             }
             catch (DbUpdateException ex)
             {
@@ -39,7 +39,7 @@ namespace Market.ServiceBusiness.Services.Services
             try
             {
                 var sellerResult = await _sellerRepository.GetSellerByIdAsync(id);
-                if(sellerResult is not null)
+                if (sellerResult is not null)
                 {
                     return await _sellerRepository.DeleteSellerAsync(sellerResult);
                 }
@@ -58,11 +58,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<List<Seller>> GetAllSellersAsync()
+        public async Task<List<SellerResponseDTO>> GetAllSellersAsync()
         {
             try
             {
-                return await _sellerRepository.GetAllSellersAsync();
+                return _mapper.Map<List<SellerResponseDTO>>(await _sellerRepository.GetAllSellersAsync());
             }
             catch (InvalidOperationException ex)
             {
@@ -74,11 +74,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<Seller> GetSellerByIdAsync(int id)
+        public async Task<SellerResponseDTO> GetSellerByIdAsync(int id)
         {
             try
             {
-                return await _sellerRepository.GetSellerByIdAsync(id);
+                return _mapper.Map<SellerResponseDTO>(await _sellerRepository.GetSellerByIdAsync(id));   
             }
             catch (InvalidOperationException ex)
             {
@@ -90,14 +90,16 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<int> UpdateSellerAsync(Seller seller, int id)
+        public async Task<int> UpdateSellerAsync(SellerRequestDTO sellerRequestDTO, int id)
         {
             try
             {
                 var sellerResult = await _sellerRepository.GetSellerByIdAsync(id);
-                if(sellerResult is not null)
+                if (sellerResult is not null)
                 {
-                    return await _sellerRepository.UpdateSellerAsync(seller);
+                    sellerResult.FirstName = sellerRequestDTO.FirstName;
+                    sellerResult.LasName = sellerRequestDTO.LasName;
+                    return await _sellerRepository.UpdateSellerAsync(sellerResult);
                 }
                 else
                 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Market.DataAccess.Models;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 using Market.ServiceBusiness.Services.IServices;
 namespace Market.Controller
 {
@@ -12,20 +13,22 @@ namespace Market.Controller
         {
             _sellerService = sellerService;
         }
+
         [HttpPost]
-        public async Task<ActionResult<int>> AddSeller(Seller seller)
+        public async Task<ActionResult<int>> AddSeller(SellerRequestDTO sellerRequestDTO)
         {
             try
             {
-                return await _sellerService.AddSellerAsync(seller);
+                return await _sellerService.AddSellerAsync(sellerRequestDTO);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<Seller>>> GetAllSellers()
+        public async Task<ActionResult<List<SellerResponseDTO>>> GetAllSellers()
         {
             try
             {
@@ -36,8 +39,9 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet("id")]
-        public async Task<ActionResult<Seller>> GetSellerById(int id)
+        public async Task<ActionResult<SellerResponseDTO>> GetSellerById(int id)
         {
             try
             {
@@ -48,18 +52,20 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpPut]
-        public async Task<ActionResult<int>> UpdateSeller(Seller seller, int id)
+        public async Task<ActionResult<int>> UpdateSeller(SellerRequestDTO sellerRequestDTO, int id)
         {
             try
             {
-                return await _sellerService.UpdateSellerAsync(seller, id);
+                return await _sellerService.UpdateSellerAsync(sellerRequestDTO, id);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpDelete]
         public async Task<ActionResult<int>> DeleteSeller(int id)
         {

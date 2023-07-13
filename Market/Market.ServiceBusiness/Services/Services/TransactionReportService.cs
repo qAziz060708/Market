@@ -1,68 +1,28 @@
 ﻿using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.ServiceBusiness.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
+using AutoMapper;
 
 namespace Market.ServiceBusiness.Services.Services
 {
     public class TransactionReportService : ITransactionReportService
     {
         private readonly ITransactionReportRepository _transactionReportRepository;
-        public TransactionReportService(ITransactionReportRepository transactionReportRepository)
+        private readonly IMapper _mapper;
+        public TransactionReportService(ITransactionReportRepository transactionReportRepository, IMapper mapper)
         {
             _transactionReportRepository = transactionReportRepository;
+            _mapper = mapper;
         }
 
-        public async Task<int> AddTransactionReportAsync(TransactionReport transactionreport)
+        public async Task<List<TransactionReportResponseDTO>> GetAllTransactionReportsAsync()
         {
             try
             {
-                return await _transactionReportRepository.AddTransactionReportAsync(transactionreport);
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("Connection between database is failed");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Operation was failed when it saved changes");
-            }
-        }
-
-        public async Task<int> DeleteTransactionReportAsync(int id)
-        {
-            try
-            {
-                var transactionReportResult = await _transactionReportRepository.GetTransactionReportByIdAsync(id);
-                if (transactionReportResult is not null)
-                {
-                    return await _transactionReportRepository.DeleteTransactionReportAsync(transactionReportResult);
-                }
-                else
-                {
-                    throw new Exception("Object cannot be deleted");
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("Connection between database is failed");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Operation was failed when it saved changes");
-            }
-        }
-
-        public async Task<List<TransactionReport>> GetAllTransactionReportsAsync()
-        {
-            try
-            {
-                return await _transactionReportRepository.GetAllTransactionReportsAsync();
+                return _mapper.Map<List<TransactionReportResponseDTO>>(await _transactionReportRepository.GetAllTransactionReportsAsync());
             }
             catch (InvalidOperationException ex)
             {
@@ -74,39 +34,15 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<TransactionReport> GetTransactionReportByIdAsync(int id)
+        public async Task<TransactionReportResponseDTO> GetTransactionReportByIdAsync(int id)
         {
             try
             {
-                return await _transactionReportRepository.GetTransactionReportByIdAsync(id);
+                return _mapper.Map<TransactionReportResponseDTO>(await _transactionReportRepository.GetTransactionReportByIdAsync(id));
             }
             catch (InvalidOperationException ex)
             {
                 throw new Exception("Operation was failed wnet it was given the info");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Operation was failed when it saved changes");
-            }
-        }
-
-        public async Task<int> UpdateTransactionReportAsync(TransactionReport transactionreport, int id)
-        {
-            try
-            {
-                var transactionReportResult = await _transactionReportRepository.GetTransactionReportByIdAsync(id);
-                if(transactionReportResult is not null)
-                {
-                    return await _transactionReportRepository.UpdateTransactionReportAsync(transactionreport);
-                }
-                else
-                {
-                    throw new Exception("Object cannot be updated");
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("Connection between database is failed");
             }
             catch (Exception ex)
             {

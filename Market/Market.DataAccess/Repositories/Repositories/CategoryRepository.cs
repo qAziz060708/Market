@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.DataAccess.DbConnection;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace Market.DataAccess.Repositories.Repositories
 {

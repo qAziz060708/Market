@@ -1,22 +1,18 @@
-﻿using Market.DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.IServices
 {
     public interface ICategoryService
     {
-        Task<int> AddCategoryAsync(Category category);
+        Task<int> AddCategoryAsync(CategoryRequestDTO categoryRequestDTO);
 
-        Task<int> UpdateCategoryAsync(Category category, int id);
+        Task<int> UpdateCategoryAsync(CategoryRequestDTO categoryRequestDTO, int id);
 
         Task<int> DeleteCategoryAsync(int id);
 
-        Task<Category> GetCategoryByIdAsync(int id);
+        Task<CategoryResponseDTO> GetCategoryByIdAsync(int id);
 
-        Task<List<Category>> GetAllCategoriesAsync();
+        Task<List<CategoryResponseDTO>> GetAllCategoriesAsync();
     }
 }

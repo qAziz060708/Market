@@ -1,29 +1,28 @@
-﻿using Market.DataAccess.Models;
-using Market.ServiceBusiness.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
-using Market.DataAccess.Repositories.Repositories;
-using System.Data.Entity.Infrastructure;
+using Market.ServiceBusiness.Services.IServices;
+using Microsoft.EntityFrameworkCore;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly IMapper _mapper;
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
-        public async Task<int> AddCategoryAsync(Category category)
+        public async Task<int> AddCategoryAsync(CategoryRequestDTO categoryRequestDTO)
         {
             try
             {
-                return await _categoryRepository.AddCategoryAsync(category);
+                return await _categoryRepository.AddCategoryAsync(_mapper.Map<Category>(categoryRequestDTO));
             }
             catch (DbUpdateException ex)
             {
@@ -59,11 +58,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<List<Category>> GetAllCategoriesAsync()
+        public async Task<List<CategoryResponseDTO>> GetAllCategoriesAsync()
         {
             try
             {
-                return await _categoryRepository.GetAllCategoriesAsync();
+                return _mapper.Map<List<CategoryResponseDTO>>(await _categoryRepository.GetAllCategoriesAsync());
             }
             catch (InvalidOperationException ex)
             {
@@ -75,11 +74,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<Category> GetCategoryByIdAsync(int id)
+        public async Task<CategoryResponseDTO> GetCategoryByIdAsync(int id)
         {
             try
             {
-                return await _categoryRepository.GetCategoryByIdAsync(id);
+                return _mapper.Map<CategoryResponseDTO>(await _categoryRepository.GetCategoryByIdAsync(id));
             }
             catch (InvalidOperationException ex)
             {
@@ -91,14 +90,16 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<int> UpdateCategoryAsync(Category category, int id)
+        public async Task<int> UpdateCategoryAsync(CategoryRequestDTO categoryRequestDTO, int id)
         {
             try
             {
                 var categoryResult = await _categoryRepository.GetCategoryByIdAsync(id);
                 if (categoryResult is not null)
                 {
-                    return await _categoryRepository.UpdateCategoryAsync(category);
+                    categoryResult.CategoryName= categoryRequestDTO.CategoryName;
+                    categoryResult.CategoryType= categoryRequestDTO.CategoryType;
+                    return await _categoryRepository.UpdateCategoryAsync(categoryResult);
                 }
                 else
                 {
