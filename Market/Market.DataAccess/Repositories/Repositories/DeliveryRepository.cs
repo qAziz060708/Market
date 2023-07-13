@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Market.DataAccess.Repositories.IRepositories;
+﻿using Market.DataAccess.DbConnection;
 using Market.DataAccess.Models;
-using Market.DataAccess.DbConnection;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+using Market.DataAccess.Repositories.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Market.DataAccess.Repositories.Repositories
 {

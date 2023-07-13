@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Market.DataAccess.Models;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 using Market.ServiceBusiness.Services.IServices;
+
 namespace Market.Controller
 {
     [Route("api/[controller]")]
@@ -12,20 +14,22 @@ namespace Market.Controller
         {
             _productService = productService;
         }
+
         [HttpPost]
-        public async Task<ActionResult<int>> AddProduct(Product product)
+        public async Task<ActionResult<int>> AddProduct(ProductRequestDTO productRequestDTO)
         {
             try
             {
-                return await _productService.AddProductAsync(product);
+                return await _productService.AddProductAsync(productRequestDTO);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAllProducts()
+        public async Task<ActionResult<List<ProductResponseDTO>>> GetAllProducts()
         {
             try
             {
@@ -36,8 +40,9 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet("id")]
-        public async Task<ActionResult<Product>> GetProductById(int id)
+        public async Task<ActionResult<ProductResponseDTO>> GetProductById(int id)
         {
             try
             {
@@ -48,18 +53,20 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpPut]
-        public async Task<ActionResult<int>> UpdateProduct(int id, Product product)
+        public async Task<ActionResult<int>> UpdateProduct(int id, ProductRequestDTO productRequestDTO)
         {
             try
             {
-                return await _productService.UpdateProductAsync(product, id);
+                return await _productService.UpdateProductAsync(productRequestDTO, id);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpDelete]
         public async Task<ActionResult<int>> DeleteProduct(int id)
         {

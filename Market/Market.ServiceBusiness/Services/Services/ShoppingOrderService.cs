@@ -1,28 +1,28 @@
-﻿using Market.DataAccess.Models;
+﻿using AutoMapper;
+using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.ServiceBusiness.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.Services
 {
     public class ShoppingOrderService : IShoppingOrderService
     {
         private readonly IShoppingOrderRepository _shoppingOrderRepository;
-        public ShoppingOrderService(IShoppingOrderRepository shoppingOrderRepository)
+        private readonly IMapper _mapper;
+        public ShoppingOrderService(IShoppingOrderRepository shoppingOrderRepository, IMapper mapper)
         {
-            _shoppingOrderRepository= shoppingOrderRepository;
+            _shoppingOrderRepository = shoppingOrderRepository;
+            _mapper = mapper;
         }
 
-        public async Task<int> AddShoppingOrderAsync(ShoppingOrder shoppingOrder)
+        public async Task<int> AddShoppingOrderAsync(ShoppingOrderRequestDTO shoppingOrderRequestDTO)
         {
             try
             {
-                return await _shoppingOrderRepository.AddShoppingOrderAsync(shoppingOrder);
+                return await _shoppingOrderRepository.AddShoppingOrderAsync(_mapper.Map<ShoppingOrder>(shoppingOrderRequestDTO));
             }
             catch (DbUpdateException ex)
             {
@@ -58,11 +58,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<List<ShoppingOrder>> GetAllShoppingOrdersAsync()
+        public async Task<List<ShoppingOrderResponseDTO>> GetAllShoppingOrdersAsync()
         {
             try
             {
-                return await _shoppingOrderRepository.GetAllShoppingOrdersAsync();
+                return _mapper.Map<List<ShoppingOrderResponseDTO>>(await _shoppingOrderRepository.GetAllShoppingOrdersAsync());
             }
             catch (InvalidOperationException ex)
             {
@@ -74,11 +74,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<ShoppingOrder> GetShoppingOrderByIdAsync(int id)
+        public async Task<ShoppingOrderResponseDTO> GetShoppingOrderByIdAsync(int id)
         {
             try
             {
-                return await _shoppingOrderRepository.GetShoppingOrderByIdAsync(id);
+                return _mapper.Map<ShoppingOrderResponseDTO>(await _shoppingOrderRepository.GetShoppingOrderByIdAsync(id));
             }
             catch (InvalidOperationException ex)
             {
@@ -90,14 +90,15 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<int> UpdateShoppingOrderAsync(ShoppingOrder shoppingOrder, int id)
+        public async Task<int> UpdateShoppingOrderAsync(ShoppingOrderRequestDTO shoppingOrderRequestDTO, int id)
         {
             try
             {
                 var shoppingOrderResult = await _shoppingOrderRepository.GetShoppingOrderByIdAsync(id);
-                if(shoppingOrderResult is not null)
+                if (shoppingOrderResult is not null)
                 {
-                    return await _shoppingOrderRepository.UpdateShoppingOrderAsync(shoppingOrder);
+                    shoppingOrderResult.OrderName = shoppingOrderRequestDTO.OrderName;
+                    return await _shoppingOrderRepository.UpdateShoppingOrderAsync(shoppingOrderResult);
                 }
                 else
                 {

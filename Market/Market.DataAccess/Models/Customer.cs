@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Market.DataAccess.Models
+﻿namespace Market.DataAccess.Models
 {
     public class Customer
     {
@@ -13,6 +7,8 @@ namespace Market.DataAccess.Models
         public string FirstName { get; set; }
 
         public string LasName { get; set; }
+
+        public string FullName { get; set; }
 
         public string ContactAdd { get; set; }
 

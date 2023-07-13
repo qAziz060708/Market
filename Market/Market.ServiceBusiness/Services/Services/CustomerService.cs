@@ -1,29 +1,28 @@
-﻿using Market.DataAccess.Models;
+﻿using AutoMapper;
+using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
-using Market.DataAccess.Repositories.Repositories;
 using Market.ServiceBusiness.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.Services
 {
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
-        public CustomerService(ICustomerRepository customerRepository)
+        private readonly IMapper _mapper;
+        public CustomerService(ICustomerRepository customerRepository, IMapper mapper)
         {
             _customerRepository = customerRepository;
+            _mapper = mapper;
         }
 
-        public async Task<int> AddCustomerAsync(Customer customer)
+        public async Task<int> AddCustomerAsync(CustomerRequestDTO customerRequestDTO)
         {
             try
             {
-                return await _customerRepository.AddCustomerAsync(customer);
+                return await _customerRepository.AddCustomerAsync(_mapper.Map<Customer>(customerRequestDTO));
             }
             catch (DbUpdateException ex)
             {
@@ -40,7 +39,7 @@ namespace Market.ServiceBusiness.Services.Services
             try
             {
                 var customerResult = await _customerRepository.GetCustomerByIdAsync(id);
-                if(customerResult is not null)
+                if (customerResult is not null)
                 {
                     return await _customerRepository.DeleteCustomerAsync(customerResult);
                 }
@@ -59,11 +58,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<List<Customer>> GetAllCustomersAsync()
+        public async Task<List<CustomerResponseDTO>> GetAllCustomersAsync()
         {
             try
             {
-                return await _customerRepository.GetAllCustomersAsync();
+                return _mapper.Map<List<CustomerResponseDTO>>(await _customerRepository.GetAllCustomersAsync());
             }
             catch (InvalidOperationException ex)
             {
@@ -75,11 +74,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<Customer> GetCustomerByIdAsync(int id)
+        public async Task<CustomerResponseDTO> GetCustomerByIdAsync(int id)
         {
             try
             {
-                return await _customerRepository.GetCustomerByIdAsync(id);
+                return _mapper.Map<CustomerResponseDTO>(await _customerRepository.GetCustomerByIdAsync(id));
             }
             catch (InvalidOperationException ex)
             {
@@ -91,14 +90,18 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<int> UpdateCustomerAsync(Customer customer, int id)
+        public async Task<int> UpdateCustomerAsync(CustomerRequestDTO customerRequestDTO, int id)
         {
             try
             {
                 var customerResult = await _customerRepository.GetCustomerByIdAsync(id);
                 if (customerResult is not null)
                 {
-                    return await _customerRepository.UpdateCustomerAsync(customer);
+                    customerResult.FirstName = customerRequestDTO.FirstName;
+                    customerResult.LasName = customerRequestDTO.LasName;
+                    customerResult.Address = customerRequestDTO.Address;
+                    customerResult.ContactAdd = customerRequestDTO.ContactAdd;
+                    return await _customerRepository.UpdateCustomerAsync(customerResult);
                 }
                 else
                 {

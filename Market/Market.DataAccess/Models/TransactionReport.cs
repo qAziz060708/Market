@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Market.DataAccess.Models
+﻿namespace Market.DataAccess.Models
 {
     public class TransactionReport
     {
-        public int ReportId { get; set; }
+        public int TransactionReportId { get; set; }
 
         public int CustomerId { get; set; }
 

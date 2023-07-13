@@ -1,28 +1,28 @@
-﻿using Market.DataAccess.Models;
+﻿using AutoMapper;
+using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.ServiceBusiness.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.Services
 {
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentRepository _paymentRepository;
-        public PaymentService(IPaymentRepository paymentRepository)
+        private readonly IMapper _mapper;
+        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper)
         {
             _paymentRepository = paymentRepository;
+            _mapper = mapper;
         }
 
-        public async Task<int> AddPaymentAsync(Payment payment)
+        public async Task<int> AddPaymentAsync(PaymentRequestDTO paymentRequestDTO)
         {
             try
             {
-                return await _paymentRepository.AddPaymentAsync(payment);
+                return await _paymentRepository.AddPaymentAsync(_mapper.Map<Payment>(paymentRequestDTO));
             }
             catch (DbUpdateException ex)
             {
@@ -58,11 +58,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<List<Payment>> GetAllPaymentsAsync()
+        public async Task<List<PaymentResponseDTO>> GetAllPaymentsAsync()
         {
             try
             {
-                return await _paymentRepository.GetAllPaymentsAsync();
+                return _mapper.Map<List<PaymentResponseDTO>>(await _paymentRepository.GetAllPaymentsAsync());
             }
             catch (InvalidOperationException ex)
             {
@@ -74,11 +74,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<Payment> GetPaymentByIdAsync(int id)
+        public async Task<PaymentResponseDTO> GetPaymentByIdAsync(int id)
         {
             try
             {
-                return await _paymentRepository.GetPaymentByIdAsync(id);
+                return _mapper.Map<PaymentResponseDTO>(await _paymentRepository.GetPaymentByIdAsync(id));
             }
             catch (InvalidOperationException ex)
             {
@@ -90,14 +90,15 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<int> UpdatePaymentAsync(Payment payment, int id)
+        public async Task<int> UpdatePaymentAsync(PaymentRequestDTO paymentRequestDTO, int id)
         {
             try
             {
                 var paymentResult = await _paymentRepository.GetPaymentByIdAsync(id);
-                if(paymentResult is not null)
+                if (paymentResult is not null)
                 {
-                    return await _paymentRepository.UpdatePaymentAsync(payment);
+                    paymentResult.PaymentType = paymentRequestDTO.PaymentType;
+                    return await _paymentRepository.UpdatePaymentAsync(paymentResult);
                 }
                 else
                 {

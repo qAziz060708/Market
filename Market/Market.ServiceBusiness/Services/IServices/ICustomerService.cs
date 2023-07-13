@@ -1,22 +1,18 @@
-﻿using Market.DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.IServices
 {
     public interface ICustomerService
     {
-        Task<int> AddCustomerAsync(Customer customer);
+        Task<int> AddCustomerAsync(CustomerRequestDTO customerRequestDTO);
 
-        Task<int> UpdateCustomerAsync(Customer customer, int id);
+        Task<int> UpdateCustomerAsync(CustomerRequestDTO customerRequestDTO, int id);
 
         Task<int> DeleteCustomerAsync(int id);
 
-        Task<Customer> GetCustomerByIdAsync(int id);
+        Task<CustomerResponseDTO> GetCustomerByIdAsync(int id);
 
-        Task<List<Customer>> GetAllCustomersAsync();
+        Task<List<CustomerResponseDTO>> GetAllCustomersAsync();
     }
 }
