@@ -8,7 +8,9 @@ namespace Market.DataAccess.Models
 {
     public class ShoppingOrder
     {
-        public int OrderId { get; set; }
+        public int ShoppingOrderId { get; set; }
+
+        public string OrderName { get; set; }
 
         public int CustomerId { get; set; }
 

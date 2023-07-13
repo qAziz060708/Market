@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Market.DataAccess.Models;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 using Market.ServiceBusiness.Services.IServices;
 namespace Market.Controller
 {
@@ -12,20 +13,22 @@ namespace Market.Controller
         {
             _customerService = customerService;
         }
+
         [HttpPost]
-        public async Task<ActionResult<int>> AddCustomer(Customer customer)
+        public async Task<ActionResult<int>> AddCustomer(CustomerRequestDTO customerRequestDTO)
         {
             try
             {
-                return await _customerService.AddCustomerAsync(customer);
+                return await _customerService.AddCustomerAsync(customerRequestDTO);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<Customer>>> GetAllCustomers()
+        public async Task<ActionResult<List<CustomerResponseDTO>>> GetAllCustomers()
         {
             try
             {
@@ -36,8 +39,9 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet("id")]
-        public async Task<ActionResult<Customer>> GetCustomerById(int id)
+        public async Task<ActionResult<CustomerResponseDTO>> GetCustomerById(int id)
         {
             try
             {
@@ -48,18 +52,20 @@ namespace Market.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpPut]
-        public async Task<ActionResult<int>> UpdateCustomer(int id, Customer customer)
+        public async Task<ActionResult<int>> UpdateCustomer(int id, CustomerRequestDTO customerRequestDTO)
         {
             try
             {
-                return await _customerService.UpdateCustomerAsync(customer, id);
+                return await _customerService.UpdateCustomerAsync(customerRequestDTO, id);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpDelete]
         public async Task<ActionResult<int>> DeleteCustomer(int id)
         {

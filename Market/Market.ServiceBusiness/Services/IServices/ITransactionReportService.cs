@@ -1,22 +1,10 @@
-﻿using Market.DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Market.ServiceBusiness.DTO.Response_DTO;
 namespace Market.ServiceBusiness.Services.IServices
 {
     public interface ITransactionReportService
     {
-        Task<int> AddTransactionReportAsync(TransactionReport transactionreport);
+        Task<TransactionReportResponseDTO> GetTransactionReportByIdAsync(int id);
 
-        Task<int> UpdateTransactionReportAsync(TransactionReport transactionreport, int id);
-
-        Task<int> DeleteTransactionReportAsync(int id);
-
-        Task<TransactionReport> GetTransactionReportByIdAsync(int id);
-
-        Task<List<TransactionReport>> GetAllTransactionReportsAsync();
+        Task<List<TransactionReportResponseDTO>> GetAllTransactionReportsAsync();
     }
 }

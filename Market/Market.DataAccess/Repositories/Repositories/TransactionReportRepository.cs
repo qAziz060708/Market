@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +25,7 @@ namespace Market.DataAccess.Repositories.Repositories
             {
                 _marketDbContext.TransactionReports.Add(transactionreport);
                 await _marketDbContext.SaveChangesAsync();
-                return transactionreport.ReportId;
+                return transactionreport.TransactionReportId;
             }
             catch (DbUpdateException ex)
             {
@@ -44,7 +43,7 @@ namespace Market.DataAccess.Repositories.Repositories
             {
                 _marketDbContext.TransactionReports.Remove(transactionreport);
                 await _marketDbContext.SaveChangesAsync();
-                return transactionreport.ReportId;
+                return transactionreport.TransactionReportId;
             }
             catch (DbUpdateException ex)
             {
@@ -82,7 +81,7 @@ namespace Market.DataAccess.Repositories.Repositories
                 return await _marketDbContext.TransactionReports
                .Include(u => u.ShoppingOrder)
                .Include(u => u.Products)
-               .FirstOrDefaultAsync(u => u.ReportId == id);
+               .FirstOrDefaultAsync(u => u.TransactionReportId == id);
             }
             catch (InvalidOperationException ex)
             {
@@ -98,9 +97,9 @@ namespace Market.DataAccess.Repositories.Repositories
         {
             try
             {
-                var transactionreportForUpdate = await GetTransactionReportByIdAsync(transactionreport.ReportId);
+                var transactionreportForUpdate = await GetTransactionReportByIdAsync(transactionreport.TransactionReportId);
                 await _marketDbContext.SaveChangesAsync();
-                return transactionreport.ReportId;
+                return transactionreport.TransactionReportId;
             }
             catch (DbUpdateException ex)
             {

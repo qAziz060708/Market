@@ -1,28 +1,28 @@
-﻿using Market.DataAccess.Models;
+﻿using AutoMapper;
+using Market.DataAccess.Models;
 using Market.DataAccess.Repositories.IRepositories;
 using Market.ServiceBusiness.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Market.ServiceBusiness.DTO.Request_DTO;
+using Market.ServiceBusiness.DTO.Response_DTO;
 
 namespace Market.ServiceBusiness.Services.Services
 {
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
-        public ProductService(IProductRepository productRepository)
+        private readonly IMapper _mapper;
+        public ProductService(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
+            _mapper = mapper;
         }
 
-        public async Task<int> AddProductAsync(Product product)
+        public async Task<int> AddProductAsync(ProductRequestDTO productRequestDTO)
         {
             try
             {
-                return await _productRepository.AddProductAsync(product);
+                return await _productRepository.AddProductAsync(_mapper.Map<Product>(productRequestDTO));
             }
             catch (DbUpdateException ex)
             {
@@ -58,11 +58,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<List<Product>> GetAllProductsAsync()
+        public async Task<List<ProductResponseDTO>> GetAllProductsAsync()
         {
             try
             {
-                return await _productRepository.GetAllProductsAsync();
+                return _mapper.Map<List<ProductResponseDTO>>(await _productRepository.GetAllProductsAsync());
             }
             catch (InvalidOperationException ex)
             {
@@ -74,11 +74,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<Product> GetProductByIdAsync(int id)
+        public async Task<ProductResponseDTO> GetProductByIdAsync(int id)
         {
             try
             {
-                return await _productRepository.GetProductByIdAsync(id);
+                return _mapper.Map<ProductResponseDTO>(await _productRepository.GetProductByIdAsync(id));
             }
             catch (InvalidOperationException ex)
             {
@@ -90,14 +90,15 @@ namespace Market.ServiceBusiness.Services.Services
             }
         }
 
-        public async Task<int> UpdateProductAsync(Product product, int id)
+        public async Task<int> UpdateProductAsync(ProductRequestDTO productRequestDTO, int id)
         {
             try
             {
                 var productResult = await _productRepository.GetProductByIdAsync(id);
                 if (productResult is not null)
                 {
-                    return await _productRepository.UpdateProductAsync(product);
+                    productResult.ProductName = productResult.ProductName;
+                    return await _productRepository.UpdateProductAsync(productResult);
                 }
                 else
                 {

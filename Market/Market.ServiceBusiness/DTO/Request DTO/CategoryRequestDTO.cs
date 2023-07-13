@@ -4,19 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Market.DataAccess.Models
+namespace Market.ServiceBusiness.DTO.Request_DTO
 {
-    public class Category
+    public class CategoryRequestDTO
     {
-        public int CategoryId { get; set; }
-
         public string CategoryName { get; set; }
 
         public string CategoryType { get; set; }
-
-
-        public List<Product> Products { get; set; }
-            
-        public Customer Customer { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace Market.DataAccess.Models
 
         public string LasName { get; set; }
 
+        public string FullName { get; set; }
+
         public string ContactAdd { get; set; }
 
         public string Address { get; set; }
