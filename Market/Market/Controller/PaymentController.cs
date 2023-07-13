@@ -2,7 +2,6 @@
 using Market.ServiceBusiness.DTO.Request_DTO;
 using Market.ServiceBusiness.DTO.Response_DTO;
 using Market.ServiceBusiness.Services.IServices;
-using Market.DataAccess.Models;
 
 namespace Market.Controller
 {

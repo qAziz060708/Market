@@ -1,10 +1,4 @@
-﻿using System;
-using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Market.ServiceBusiness;
+﻿using AutoMapper;
 using Market.DataAccess.Models;
 using Market.ServiceBusiness.DTO.Request_DTO;
 using Market.ServiceBusiness.DTO.Response_DTO;

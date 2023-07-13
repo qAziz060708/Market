@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Market.ServiceBusiness.DTO.Response_DTO;
 using Market.ServiceBusiness.Services.IServices;
+
 namespace Market.Controller
 {
     [Route("api/[controller]")]

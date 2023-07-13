@@ -1,10 +1,7 @@
-﻿using Market.DataAccess.Models;
+﻿using AutoMapper;
 using Market.DataAccess.Repositories.IRepositories;
-using Market.ServiceBusiness.Services.IServices;
-using Microsoft.EntityFrameworkCore;
-using Market.ServiceBusiness.DTO.Request_DTO;
 using Market.ServiceBusiness.DTO.Response_DTO;
-using AutoMapper;
+using Market.ServiceBusiness.Services.IServices;
 
 namespace Market.ServiceBusiness.Services.Services
 {
