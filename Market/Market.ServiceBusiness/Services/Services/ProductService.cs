@@ -12,6 +12,7 @@ namespace Market.ServiceBusiness.Services.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+
         public ProductService(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
@@ -24,13 +25,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return await _productRepository.AddProductAsync(_mapper.Map<Product>(productRequestDTO));
             }
+            catch (AutoMapperMappingException ex)
+            {
+                throw new Exception("Mapping failed");
+            }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -50,11 +55,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was deleting changes");
             }
         }
 
@@ -64,13 +69,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<List<ProductResponseDTO>>(await _productRepository.GetAllProductsAsync());
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -80,13 +89,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<ProductResponseDTO>(await _productRepository.GetProductByIdAsync(id));
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -97,7 +110,8 @@ namespace Market.ServiceBusiness.Services.Services
                 var productResult = await _productRepository.GetProductByIdAsync(id);
                 if (productResult is not null)
                 {
-                    productResult.ProductName = productResult.ProductName;
+                    productResult = _mapper.Map<Product>(productRequestDTO);
+                    productResult.ProductId = id;
                     return await _productRepository.UpdateProductAsync(productResult);
                 }
                 else
@@ -107,11 +121,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was updating changes");
             }
         }
     }

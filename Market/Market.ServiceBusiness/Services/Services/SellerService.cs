@@ -12,6 +12,7 @@ namespace Market.ServiceBusiness.Services.Services
     {
         private readonly ISellerRepository _sellerRepository;
         private readonly IMapper _mapper;
+
         public SellerService(ISellerRepository sellerRepository, IMapper mapper)
         {
             _sellerRepository = sellerRepository;
@@ -24,13 +25,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return await _sellerRepository.AddSellerAsync(_mapper.Map<Seller>(sellerRequestDTO));
             }
+            catch (AutoMapperMappingException ex)
+            {
+                throw new Exception("Mapping failed");
+            }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -50,11 +55,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was deleting changes");
             }
         }
 
@@ -64,13 +69,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<List<SellerResponseDTO>>(await _sellerRepository.GetAllSellersAsync());
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -78,15 +87,19 @@ namespace Market.ServiceBusiness.Services.Services
         {
             try
             {
-                return _mapper.Map<SellerResponseDTO>(await _sellerRepository.GetSellerByIdAsync(id));   
+                return _mapper.Map<SellerResponseDTO>(await _sellerRepository.GetSellerByIdAsync(id));
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -97,8 +110,8 @@ namespace Market.ServiceBusiness.Services.Services
                 var sellerResult = await _sellerRepository.GetSellerByIdAsync(id);
                 if (sellerResult is not null)
                 {
-                    sellerResult.FirstName = sellerRequestDTO.FirstName;
-                    sellerResult.LasName = sellerRequestDTO.LasName;
+                    sellerResult = _mapper.Map<Seller>(sellerRequestDTO);
+                    sellerResult.SellerId = id;
                     return await _sellerRepository.UpdateSellerAsync(sellerResult);
                 }
                 else
@@ -108,11 +121,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was updating changes");
             }
         }
     }

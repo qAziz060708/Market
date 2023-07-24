@@ -2,6 +2,7 @@
 using Market.DataAccess.Repositories.IRepositories;
 using Market.ServiceBusiness.Services.IServices;
 using Market.ServiceBusiness.DTO.Response_DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace Market.ServiceBusiness.Services.Services
 {
@@ -9,6 +10,7 @@ namespace Market.ServiceBusiness.Services.Services
     {
         private readonly IDeliveryRepository _deliveryRepository;
         private readonly IMapper _mapper;
+
         public DeliveryService(IDeliveryRepository deliveryRepository, IMapper mapper)
         {
             _deliveryRepository = deliveryRepository;
@@ -21,13 +23,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<List<DeliveryResponseDTO>>(await _deliveryRepository.GetAllDeliveriesAsync());
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -37,13 +43,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<DeliveryResponseDTO>(await _deliveryRepository.GetDeliveryByIdAsync(id));
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
     }
