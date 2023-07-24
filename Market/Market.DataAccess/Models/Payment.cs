@@ -4,13 +4,13 @@
     {
         public int PaymentId { get; set; }
 
-        public string PaymentType { get; set; }
+        public int ShoppingOrderId { get; set; }
 
-        public int CategoryId { get; set; }
+        public string PaymentType { get; set; }
 
         public DateTime PaymentDate { get; set; }
 
 
-        public Customer Customer { get; set; }
+        public ShoppingOrder ShoppingOrder { get; set; }
     }
 }

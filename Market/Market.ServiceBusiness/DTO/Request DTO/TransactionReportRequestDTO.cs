@@ -1,9 +1,9 @@
 ﻿namespace Market.ServiceBusiness.DTO.Request_DTO
 {
-    public class ShoppingOrderRequestDTO
+    public class TransactionReportRequestDTO
     {
         public int CustomerId { get; set; }
 
-        public DateTime ShoppingDate { get; set; }
+        public int ShoppingOrderId { get; set; }
     }
 }

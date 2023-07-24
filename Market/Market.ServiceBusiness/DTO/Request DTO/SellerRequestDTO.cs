@@ -2,8 +2,10 @@
 {
     public class SellerRequestDTO
     {
+        public int CategoryId { get; set; }
+
         public string FirstName { get; set; }
 
-        public string LasName { get; set; }
+        public string LastName { get; set; }
     }
 }

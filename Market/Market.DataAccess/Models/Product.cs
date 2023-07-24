@@ -9,12 +9,6 @@
         public string ProductName { get; set; }
 
 
-        public List<Seller> Sellers { get; set;}
-
-        public List<TransactionReport> TransactionReports { get; set;}
-
-        public Customer Customer { get; set; }
-
         public Category Category { get; set; }
     }
 }
