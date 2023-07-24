@@ -5,5 +5,7 @@
         public int SellerId { get; set; }
 
         public int ProductId { get; set; }
+
+        public string FullName { get; set; }
     }
 }

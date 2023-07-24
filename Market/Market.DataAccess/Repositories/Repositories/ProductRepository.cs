@@ -55,7 +55,7 @@ namespace Market.DataAccess.Repositories.Repositories
             try
             {
                 return await _marketDbContext.Products
-               .Include(u => u.Sellers)
+               .Include(u => u.Seller)
                .Include(u => u.TransactionReports)
                .Include(u => u.Customer)
                .Include(u => u.Category)
@@ -77,7 +77,7 @@ namespace Market.DataAccess.Repositories.Repositories
             try
             {
                 return await _marketDbContext.Products
-               .Include(u => u.Sellers)
+               .Include(u => u.Seller)
                .Include(u => u.TransactionReports)
                .Include(u => u.Customer)
                .Include(u => u.Category)
