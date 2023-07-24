@@ -46,7 +46,7 @@ namespace Market.DataAccess.Repositories.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it deleting changes");
             }
         }
 
@@ -59,15 +59,16 @@ namespace Market.DataAccess.Repositories.Repositories
                .Include(u => u.TransactionReports)
                .Include(u => u.Customer)
                .Include(u => u.Category)
+               .AsSplitQuery()
                .ToListAsync();
             }
             catch (InvalidOperationException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Operation was failed when it was giving the info");
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was giving products information");
             }
         }
 
@@ -80,15 +81,16 @@ namespace Market.DataAccess.Repositories.Repositories
                .Include(u => u.TransactionReports)
                .Include(u => u.Customer)
                .Include(u => u.Category)
+               .AsSplitQuery()
                .FirstOrDefaultAsync(u => u.ProductId == id);
             }
             catch (InvalidOperationException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Operation was failed when it was giving the info");
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was giving ProductById information");
             }
         }
 
@@ -107,7 +109,7 @@ namespace Market.DataAccess.Repositories.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was updating changes");
             }
         }
     }

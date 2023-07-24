@@ -12,6 +12,7 @@ namespace Market.ServiceBusiness.Services.Services
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
+
         public CustomerService(ICustomerRepository customerRepository, IMapper mapper)
         {
             _customerRepository = customerRepository;
@@ -24,13 +25,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return await _customerRepository.AddCustomerAsync(_mapper.Map<Customer>(customerRequestDTO));
             }
+            catch (AutoMapperMappingException ex)
+            {
+                throw new Exception("Mapping failed");
+            }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -50,11 +55,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was deleting changes");
             }
         }
 
@@ -64,13 +69,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<List<CustomerResponseDTO>>(await _customerRepository.GetAllCustomersAsync());
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -80,13 +89,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<CustomerResponseDTO>(await _customerRepository.GetCustomerByIdAsync(id));
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -97,10 +110,8 @@ namespace Market.ServiceBusiness.Services.Services
                 var customerResult = await _customerRepository.GetCustomerByIdAsync(id);
                 if (customerResult is not null)
                 {
-                    customerResult.FirstName = customerRequestDTO.FirstName;
-                    customerResult.LasName = customerRequestDTO.LasName;
-                    customerResult.Address = customerRequestDTO.Address;
-                    customerResult.ContactAdd = customerRequestDTO.ContactAdd;
+                    customerResult = _mapper.Map<Customer>(customerRequestDTO);
+                    customerResult.CustomerId = id;
                     return await _customerRepository.UpdateCustomerAsync(customerResult);
                 }
                 else
@@ -110,11 +121,11 @@ namespace Market.ServiceBusiness.Services.Services
             }
             catch (DbUpdateException ex)
             {
-                throw new Exception("Connection between database is failed");
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was updating changes");
             }
         }
     }
