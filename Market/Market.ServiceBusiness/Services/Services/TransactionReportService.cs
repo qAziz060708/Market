@@ -2,6 +2,7 @@
 using Market.DataAccess.Repositories.IRepositories;
 using Market.ServiceBusiness.DTO.Response_DTO;
 using Market.ServiceBusiness.Services.IServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace Market.ServiceBusiness.Services.Services
 {
@@ -9,6 +10,7 @@ namespace Market.ServiceBusiness.Services.Services
     {
         private readonly ITransactionReportRepository _transactionReportRepository;
         private readonly IMapper _mapper;
+
         public TransactionReportService(ITransactionReportRepository transactionReportRepository, IMapper mapper)
         {
             _transactionReportRepository = transactionReportRepository;
@@ -21,13 +23,17 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<List<TransactionReportResponseDTO>>(await _transactionReportRepository.GetAllTransactionReportsAsync());
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -37,15 +43,18 @@ namespace Market.ServiceBusiness.Services.Services
             {
                 return _mapper.Map<TransactionReportResponseDTO>(await _transactionReportRepository.GetTransactionReportByIdAsync(id));
             }
-            catch (InvalidOperationException ex)
+            catch (AutoMapperMappingException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Mapping failed");
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception(ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception(ex.Message);
             }
         }
     }
 }
-//tester

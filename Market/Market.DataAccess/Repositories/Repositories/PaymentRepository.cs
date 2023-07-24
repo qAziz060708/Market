@@ -28,7 +28,7 @@ namespace Market.DataAccess.Repositories.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was adding changes");
             }
         }
 
@@ -46,7 +46,7 @@ namespace Market.DataAccess.Repositories.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was deleting changes");
             }
         }
 
@@ -56,15 +56,16 @@ namespace Market.DataAccess.Repositories.Repositories
             {
                 return await _marketDbContext.Payments
                .Include(u => u.Customer)
+               .AsSplitQuery()
                .ToListAsync();
             }
             catch (InvalidOperationException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Operation was failed when it was giving the info");
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was giving payments information");
             }
         }
 
@@ -74,15 +75,16 @@ namespace Market.DataAccess.Repositories.Repositories
             {
                 return await _marketDbContext.Payments
                .Include(u => u.Customer)
+               .AsSplitQuery()
                .FirstOrDefaultAsync(u => u.PaymentId == id);
             }
             catch (InvalidOperationException ex)
             {
-                throw new Exception("Operation was failed wnet it was given the info");
+                throw new Exception("Operation was failed when it was giving the info");
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was giving PaymentById information");
             }
         }
 
@@ -101,7 +103,7 @@ namespace Market.DataAccess.Repositories.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it saved changes");
+                throw new Exception("Operation was failed when it was updating changes");
             }
         }
     }
