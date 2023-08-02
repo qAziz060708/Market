@@ -8,11 +8,11 @@ namespace Market.Controller
     [Route("api/[controller]")]
     [ApiController]
 
-    public class DeliveryControlller : ControllerBase
+    public class DeliveryController : ControllerBase
     {
         private readonly IDeliveryService _deliveryService;
 
-        public DeliveryControlller(IDeliveryService deliveryService)
+        public DeliveryController(IDeliveryService deliveryService)
         {
             _deliveryService = deliveryService;
         }

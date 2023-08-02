@@ -9,7 +9,7 @@ namespace Market.ServiceBusiness.Services.IServices
 
         Task<int> UpdateTransactionReportAsync(TransactionReportRequestDTO transactionReportRequestDTO, int id);
 
-        Task <int> DeleteTransactionReportAsync(int id);
+        Task<int> DeleteTransactionReportAsync(int id);
 
         Task<TransactionReportResponseDTO> GetTransactionReportByIdAsync(int id);
 
