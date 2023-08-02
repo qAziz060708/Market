@@ -55,10 +55,12 @@ namespace Market.DataAccess.Repositories.Repositories
             try
             {
                 return await _marketDbContext.ShoppingOrders
-               .Include(u => u.TransactionReports)
-               .Include(u => u.Customer)
-               .AsSplitQuery()
-               .ToListAsync();
+                   .Include(u => u.ShoppingOrdersAndProducts)
+                   .Include(u => u.TransactionReport)
+                   .Include(u => u.Payment)
+                   .Include(u => u.Customer)
+                   .AsSplitQuery()
+                   .ToListAsync();
             }
             catch (InvalidOperationException ex)
             {
@@ -75,10 +77,12 @@ namespace Market.DataAccess.Repositories.Repositories
             try
             {
                 return await _marketDbContext.ShoppingOrders
-               .Include(u => u.TransactionReports)
-               .Include(u => u.Customer)
-               .AsSplitQuery()
-               .FirstOrDefaultAsync(u => u.ShoppingOrderId == id);
+                   .Include(u => u.ShoppingOrdersAndProducts)
+                   .Include(u => u.TransactionReport)
+                   .Include(u => u.Payment)
+                   .Include(u => u.Customer)
+                   .AsSplitQuery()
+                   .FirstOrDefaultAsync(u => u.ShoppingOrderId == id);
             }
             catch (InvalidOperationException ex)
             {

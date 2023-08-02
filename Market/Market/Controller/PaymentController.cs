@@ -10,6 +10,7 @@ namespace Market.Controller
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
+
         public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;

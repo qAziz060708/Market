@@ -38,12 +38,7 @@ namespace Market.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
                     b.HasKey("CategoryId");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("Categories");
                 });
@@ -68,11 +63,7 @@ namespace Market.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LasName")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -110,12 +101,6 @@ namespace Market.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PaymentId"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -124,8 +109,6 @@ namespace Market.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("PaymentId");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("Payments");
                 });
@@ -141,18 +124,16 @@ namespace Market.DataAccess.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("ShoppingOrdersAndProductsId")
+                        .HasColumnType("integer");
+
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("Products");
                 });
@@ -165,18 +146,21 @@ namespace Market.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SellerId"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LasName")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
                     b.HasKey("SellerId");
+
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
 
                     b.ToTable("Sellers");
                 });
@@ -192,9 +176,8 @@ namespace Market.DataAccess.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("OrderName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ShoppingDate")
                         .HasColumnType("timestamp with time zone");
@@ -203,7 +186,33 @@ namespace Market.DataAccess.Migrations
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
+
                     b.ToTable("ShoppingOrders");
+                });
+
+            modelBuilder.Entity("Market.DataAccess.Models.ShoppingOrdersAndProducts", b =>
+                {
+                    b.Property<int>("ShoppingOrdersAndProductsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ShoppingOrdersAndProductsId"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ShoppingOrderId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ShoppingOrdersAndProductsId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingOrderId");
+
+                    b.ToTable("ShoppingOrdersAndProducts");
                 });
 
             modelBuilder.Entity("Market.DataAccess.Models.TransactionReport", b =>
@@ -214,84 +223,21 @@ namespace Market.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TransactionReportId"));
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PaymentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ShoppingOrderId")
                         .HasColumnType("integer");
 
                     b.HasKey("TransactionReportId");
 
-                    b.HasIndex("ShoppingOrderId");
+                    b.HasIndex("ShoppingOrderId")
+                        .IsUnique();
 
                     b.ToTable("TransactionReports");
-                });
-
-            modelBuilder.Entity("ProductSeller", b =>
-                {
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SellersSellerId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProductsProductId", "SellersSellerId");
-
-                    b.HasIndex("SellersSellerId");
-
-                    b.ToTable("ProductSeller");
-                });
-
-            modelBuilder.Entity("ProductTransactionReport", b =>
-                {
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TransactionReportsTransactionReportId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProductsProductId", "TransactionReportsTransactionReportId");
-
-                    b.HasIndex("TransactionReportsTransactionReportId");
-
-                    b.ToTable("ProductTransactionReport");
-                });
-
-            modelBuilder.Entity("Market.DataAccess.Models.Category", b =>
-                {
-                    b.HasOne("Market.DataAccess.Models.Customer", "Customer")
-                        .WithMany("Categories")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Market.DataAccess.Models.Delivery", b =>
                 {
                     b.HasOne("Market.DataAccess.Models.Customer", "Customer")
                         .WithMany("Deliveries")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Market.DataAccess.Models.Payment", b =>
-                {
-                    b.HasOne("Market.DataAccess.Models.Customer", "Customer")
-                        .WithMany("Payments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -307,15 +253,18 @@ namespace Market.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Market.DataAccess.Models.Customer", "Customer")
-                        .WithMany("Products")
-                        .HasForeignKey("CustomerId")
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Market.DataAccess.Models.Seller", b =>
+                {
+                    b.HasOne("Market.DataAccess.Models.Category", "Category")
+                        .WithOne("Seller")
+                        .HasForeignKey("Market.DataAccess.Models.Seller", "CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Market.DataAccess.Models.ShoppingOrder", b =>
@@ -326,71 +275,79 @@ namespace Market.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Market.DataAccess.Models.Payment", "Payment")
+                        .WithOne("ShoppingOrder")
+                        .HasForeignKey("Market.DataAccess.Models.ShoppingOrder", "PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("Market.DataAccess.Models.ShoppingOrdersAndProducts", b =>
+                {
+                    b.HasOne("Market.DataAccess.Models.Product", "Product")
+                        .WithMany("ShoppingOrdersAndProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Market.DataAccess.Models.ShoppingOrder", "ShoppingOrder")
+                        .WithMany("ShoppingOrdersAndProducts")
+                        .HasForeignKey("ShoppingOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ShoppingOrder");
                 });
 
             modelBuilder.Entity("Market.DataAccess.Models.TransactionReport", b =>
                 {
                     b.HasOne("Market.DataAccess.Models.ShoppingOrder", "ShoppingOrder")
-                        .WithMany("TransactionReports")
-                        .HasForeignKey("ShoppingOrderId")
+                        .WithOne("TransactionReport")
+                        .HasForeignKey("Market.DataAccess.Models.TransactionReport", "ShoppingOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ShoppingOrder");
                 });
 
-            modelBuilder.Entity("ProductSeller", b =>
-                {
-                    b.HasOne("Market.DataAccess.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Market.DataAccess.Models.Seller", null)
-                        .WithMany()
-                        .HasForeignKey("SellersSellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProductTransactionReport", b =>
-                {
-                    b.HasOne("Market.DataAccess.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Market.DataAccess.Models.TransactionReport", null)
-                        .WithMany()
-                        .HasForeignKey("TransactionReportsTransactionReportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Market.DataAccess.Models.Category", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("Seller")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Market.DataAccess.Models.Customer", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Deliveries");
-
-                    b.Navigation("Payments");
-
-                    b.Navigation("Products");
 
                     b.Navigation("ShoppingOrders");
                 });
 
+            modelBuilder.Entity("Market.DataAccess.Models.Payment", b =>
+                {
+                    b.Navigation("ShoppingOrder")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Market.DataAccess.Models.Product", b =>
+                {
+                    b.Navigation("ShoppingOrdersAndProducts");
+                });
+
             modelBuilder.Entity("Market.DataAccess.Models.ShoppingOrder", b =>
                 {
-                    b.Navigation("TransactionReports");
+                    b.Navigation("ShoppingOrdersAndProducts");
+
+                    b.Navigation("TransactionReport")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

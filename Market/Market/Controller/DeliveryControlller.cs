@@ -7,21 +7,22 @@ namespace Market.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ShoppingOrderController : ControllerBase
-    {
-        private readonly IShoppingOrderService _shoppingOrderService;
 
-        public ShoppingOrderController(IShoppingOrderService shoppingOrderService)
+    public class DeliveryController : ControllerBase
+    {
+        private readonly IDeliveryService _deliveryService;
+
+        public DeliveryController(IDeliveryService deliveryService)
         {
-            _shoppingOrderService = shoppingOrderService;
+            _deliveryService = deliveryService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> AddShoppingOrder(ShoppingOrderRequestDTO shoppingOrderRequestDTO)
+        public async Task<ActionResult<int>> AddDelivery(DeliveryRequestDTO deliveryRequestDTO)
         {
             try
             {
-                return await _shoppingOrderService.AddShoppingOrderAsync(shoppingOrderRequestDTO);
+                return await _deliveryService.AddDeliveryAsync(deliveryRequestDTO);
             }
             catch (Exception ex)
             {
@@ -30,11 +31,11 @@ namespace Market.Controller
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ShoppingOrderResponseDTO>>> GetAllShoppingOrders()
+        public async Task<ActionResult<List<DeliveryResponseDTO>>> GetAllDeliveries()
         {
             try
             {
-                return await _shoppingOrderService.GetAllShoppingOrdersAsync();
+                return await _deliveryService.GetAllDeliveriesAsync();
             }
             catch (Exception ex)
             {
@@ -43,11 +44,11 @@ namespace Market.Controller
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<ShoppingOrderResponseDTO>> GetShoppingOrderById(int id)
+        public async Task<ActionResult<DeliveryResponseDTO>> GetDeliveryById(int id)
         {
             try
             {
-                return await _shoppingOrderService.GetShoppingOrderByIdAsync(id);
+                return await _deliveryService.GetDeliveryByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -56,11 +57,11 @@ namespace Market.Controller
         }
 
         [HttpPut]
-        public async Task<ActionResult<int>> UpdateShoppingOrder(ShoppingOrderRequestDTO shoppingOrderRequestDTO, int id)
+        public async Task<ActionResult<int>> UpdateDelivery(DeliveryRequestDTO deliveryRequestDTO, int id)
         {
             try
             {
-                return await _shoppingOrderService.UpdateShoppingOrderAsync(shoppingOrderRequestDTO, id);
+                return await _deliveryService.UpdateDeliveryAsync(deliveryRequestDTO, id);
             }
             catch (Exception ex)
             {
@@ -69,11 +70,11 @@ namespace Market.Controller
         }
 
         [HttpDelete]
-        public async Task<ActionResult<int>> DeleteShoppingOrder(int id)
+        public async Task<ActionResult<int>> DeleteDelivery(int id)
         {
             try
             {
-                return await _shoppingOrderService.DeleteShoppingOrderAsync(id);
+                return await _deliveryService.DeleteDeliveryAsync(id);
             }
             catch (Exception ex)
             {
