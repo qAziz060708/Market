@@ -55,9 +55,9 @@ namespace Market.DataAccess.Repositories.Repositories
             try
             {
                 return await _marketDbContext.Sellers
-               .Include(u => u.Products)
-               .AsSplitQuery()
-               .ToListAsync();
+                   .Include(u => u.Category)
+                   .AsSplitQuery()
+                   .ToListAsync();
             }
             catch (InvalidOperationException ex)
             {
@@ -74,9 +74,9 @@ namespace Market.DataAccess.Repositories.Repositories
             try
             {
                 return await _marketDbContext.Sellers
-               .Include(u => u.Products)
-               .AsSplitQuery()
-               .FirstOrDefaultAsync(u => u.SellerId == id);
+                   .Include(u => u.Category)
+                   .AsSplitQuery()
+                   .FirstOrDefaultAsync(u => u.SellerId == id);
             }
             catch (InvalidOperationException ex)
             {
@@ -94,7 +94,7 @@ namespace Market.DataAccess.Repositories.Repositories
             {
                 var sellerForUpdate = await GetSellerByIdAsync(seller.SellerId);
                 sellerForUpdate.FirstName = seller.FirstName;
-                sellerForUpdate.LasName = seller.LasName;
+                sellerForUpdate.LastName = seller.LastName;
                 await _marketDbContext.SaveChangesAsync();
                 return seller.SellerId;
             }

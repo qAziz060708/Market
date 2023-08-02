@@ -8,7 +8,11 @@
 
         public string ProductName { get; set; }
 
+        public int ShoppingOrdersAndProductsId { get; set; }
+
 
         public Category Category { get; set; }
+
+        public List<ShoppingOrdersAndProducts> ShoppingOrdersAndProducts { get; set; }
     }
 }

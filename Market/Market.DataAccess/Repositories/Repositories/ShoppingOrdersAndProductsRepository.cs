@@ -5,22 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Market.DataAccess.Repositories.Repositories
 {
-    public class PaymentRepository : IPaymentRepository
+    public class ShoppingOrdersAndProductsRepository : IShoppingOrdersAndProductsRepository
     {
         private readonly MarketDbContext _marketDbContext;
 
-        public PaymentRepository(MarketDbContext marketDbContext)
+        public ShoppingOrdersAndProductsRepository(MarketDbContext marketDbContext)
         {
             _marketDbContext = marketDbContext;
         }
 
-        public async Task<int> AddPaymentAsync(Payment payment)
+        public async Task<int> AddShoppingOrdersAndProductsAsync(ShoppingOrdersAndProducts shoppingOrdersAndProducts)
         {
             try
             {
-                _marketDbContext.Payments.Add(payment);
+                _marketDbContext.ShoppingOrdersAndProducts.Add(shoppingOrdersAndProducts);
                 await _marketDbContext.SaveChangesAsync();
-                return payment.PaymentId;
+                return shoppingOrdersAndProducts.ShoppingOrdersAndProductsId;
             }
             catch (DbUpdateException ex)
             {
@@ -32,13 +32,13 @@ namespace Market.DataAccess.Repositories.Repositories
             }
         }
 
-        public async Task<int> DeletePaymentAsync(Payment payment)
+        public async Task<int> DeleteShoppingOrdersAndProductsAsync(ShoppingOrdersAndProducts shoppingOrdersAndProducts)
         {
             try
             {
-                _marketDbContext.Payments.Remove(payment);
+                _marketDbContext.ShoppingOrdersAndProducts.Remove(shoppingOrdersAndProducts);
                 await _marketDbContext.SaveChangesAsync();
-                return payment.PaymentId;
+                return shoppingOrdersAndProducts.ShoppingOrdersAndProductsId;
             }
             catch (DbUpdateException ex)
             {
@@ -50,14 +50,15 @@ namespace Market.DataAccess.Repositories.Repositories
             }
         }
 
-        public async Task<List<Payment>> GetAllPaymentsAsync()
+        public async Task<List<ShoppingOrdersAndProducts>> GetAllShoppingOrdersAndProductsAsync()
         {
             try
             {
-                return await _marketDbContext.Payments
-                   .Include(u => u.ShoppingOrder)
-                   .AsSplitQuery()
-                   .ToListAsync();
+                return await _marketDbContext.ShoppingOrdersAndProducts
+                    .Include(u => u.Product)
+                    .Include(u => u.ShoppingOrder)
+                    .AsSplitQuery()
+                    .ToListAsync();
             }
             catch (InvalidOperationException ex)
             {
@@ -65,18 +66,19 @@ namespace Market.DataAccess.Repositories.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it was giving payments information");
+                throw new Exception("Operation was failed when it was giving ShoppingOrdersAndProducts information");
             }
         }
 
-        public async Task<Payment> GetPaymentByIdAsync(int id)
+        public async Task<ShoppingOrdersAndProducts> GetShoppingOrdersAndProductsByIdAsync(int id)
         {
             try
             {
-                return await _marketDbContext.Payments
-                   .Include(u => u.ShoppingOrder)
-                   .AsSplitQuery()
-                   .FirstOrDefaultAsync(u => u.PaymentId == id);
+                return await _marketDbContext.ShoppingOrdersAndProducts
+                    .Include(u => u.Product)
+                    .Include(u => u.ShoppingOrder)
+                    .AsSplitQuery()
+                    .FirstOrDefaultAsync(u => u.ShoppingOrdersAndProductsId == id);
             }
             catch (InvalidOperationException ex)
             {
@@ -84,18 +86,17 @@ namespace Market.DataAccess.Repositories.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Operation was failed when it was giving PaymentById information");
+                throw new Exception("Operation was failed when it was giving ShoppingOrdersAndProductsById information");
             }
         }
 
-        public async Task<int> UpdatePaymentAsync(Payment payment)
+        public async Task<int> UpdateShoppingOrdersAndProductsAsync(ShoppingOrdersAndProducts shoppingOrdersAndProducts)
         {
             try
             {
-                var paymentForUpdate = await GetPaymentByIdAsync(payment.PaymentId);
-                paymentForUpdate.PaymentDate = payment.PaymentDate;
+                var shoppingOrdersAndProductsForUpdate = await GetShoppingOrdersAndProductsByIdAsync(shoppingOrdersAndProducts.ShoppingOrderId);
                 await _marketDbContext.SaveChangesAsync();
-                return payment.PaymentId;
+                return shoppingOrdersAndProducts.ShoppingOrdersAndProductsId;
             }
             catch (DbUpdateException ex)
             {
