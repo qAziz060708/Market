@@ -55,13 +55,10 @@ namespace Market.DataAccess.Repositories.Repositories
             try
             {
                 return await _marketDbContext.Customers
-               .Include(u => u.Categories)
-               .Include(u => u.Products)
-               .Include(u => u.Payments)
-               .Include(u => u.Deliveries)
-               .Include(u => u.ShoppingOrders)
-               .AsSplitQuery()
-               .ToListAsync();
+                   .Include(u => u.Deliveries)
+                   .Include(u => u.ShoppingOrders)
+                   .AsSplitQuery()
+                   .ToListAsync();
             }
             catch (InvalidOperationException ex)
             {
@@ -78,13 +75,10 @@ namespace Market.DataAccess.Repositories.Repositories
             try
             {
                 return await _marketDbContext.Customers
-               .Include(u => u.Categories)
-               .Include(u => u.Products)
-               .Include(u => u.Payments)
-               .Include(u => u.Deliveries)
-               .Include(u => u.ShoppingOrders)
-               .AsSplitQuery()
-               .FirstOrDefaultAsync(u => u.CustomerId == id);
+                   .Include(u => u.Deliveries)
+                   .Include(u => u.ShoppingOrders)
+                   .AsSplitQuery()
+                   .FirstOrDefaultAsync(u => u.CustomerId == id);
             }
             catch (InvalidOperationException ex)
             {
@@ -102,7 +96,7 @@ namespace Market.DataAccess.Repositories.Repositories
             {
                 var customerForUpdate = await GetCustomerByIdAsync(customer.CustomerId);
                 customerForUpdate.FirstName = customer.FirstName;
-                customerForUpdate.LasName = customer.LasName;
+                customerForUpdate.LastName = customer.LastName;
                 customerForUpdate.Address = customer.Address;
                 customerForUpdate.ContactAdd= customer.ContactAdd;
                 await _marketDbContext.SaveChangesAsync();

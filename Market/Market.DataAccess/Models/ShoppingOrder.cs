@@ -8,9 +8,15 @@
 
         public DateTime ShoppingDate { get; set; }
 
+        public int PaymentId { get; set; }
+
 
         public TransactionReport TransactionReport { get; set; }
 
         public Customer Customer { get; set; }
+
+        public List<ShoppingOrdersAndProducts> ShoppingOrdersAndProducts { get; set; }
+
+        public Payment Payment { get; set; }
     }
 }

@@ -10,5 +10,7 @@
 
 
         public List<Product> Products { get; set; }
+
+        public Seller Seller { get; set; }
     }
 }

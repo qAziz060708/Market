@@ -24,5 +24,7 @@ namespace Market.DataAccess.DbConnection
         public DbSet<ShoppingOrder> ShoppingOrders { get; set; }
 
         public DbSet<TransactionReport> TransactionReports { get; set; }
+
+        public DbSet<ShoppingOrdersAndProducts> ShoppingOrdersAndProducts { get; set; }
     }
 }

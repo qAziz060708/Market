@@ -10,6 +10,7 @@ namespace Market.Controller
     public class SellerController : ControllerBase
     {
         private readonly ISellerService _sellerService;
+
         public SellerController(ISellerService sellerService)
         {
             _sellerService = sellerService;
