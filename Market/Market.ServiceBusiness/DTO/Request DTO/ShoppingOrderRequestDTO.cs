@@ -4,6 +4,8 @@
     {
         public int CustomerId { get; set; }
 
+        public int PaymentId { get; set; }
+
         public DateTime ShoppingDate { get; set; }
     }
 }
