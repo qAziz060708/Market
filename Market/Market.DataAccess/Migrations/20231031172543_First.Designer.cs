@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Market.DataAccess.Migrations
 {
     [DbContext(typeof(MarketDbContext))]
-    [Migration("20230802093611_ll")]
-    partial class ll
+    [Migration("20231031172543_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
